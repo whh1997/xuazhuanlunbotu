@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.box{
+				width: 1200px;
+				margin: 100px auto;
+			}
+			.silder{
+				height: 500px;
+				position: relative;
+			}
+			.silder li{
+				position: absolute;
+				top: 0;
+				left: 200px;
+			}
+			.silder li img{
+				width: 100%;
+			}
+			.arrow{
+				opacity: 0;
+				position: relative;
+				z-index: 100;
+			}
+			.prev,.next{
+				width: 76px;
+				height: 112px;
+				position: absolute;
+				top: 50%;
+				margin-top: -56px;
+				background: url(37_images/prev.png) no-repeat;
+				z-index: 99;
+			}
+			.next{
+				right: 0;
+				background: url(37_images/next.png);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box" id="box">
+			<div class="silder" id="silder">
+				<ul>
+					<li><a href=""><img src="37_images/slidepic1.jpg" alt="" /></a></li>
+					<li><a href=""><img src="37_images/slidepic2.jpg" alt="" /></a></li>
+					<li><a href=""><img src="37_images/slidepic3.jpg" alt="" /></a></li>
+					<li><a href=""><img src="37_images/slidepic4.jpg" alt="" /></a></li>
+					<li><a href=""><img src="37_images/slidepic5.jpg" alt="" /></a></li>
+				</ul>
+				<div class="arrow" id="arrow">
+					<a href="javascript:;" class="prev"></a>
+					<a href="javascript:;" class="next"></a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="animate.js" type="text/javascript"></script>
+<script>
+	var box=document.getElementById("box");
+	var silder=document.getElementById("silder");
+	var lis=silder.children[0].children;
+	var arrow=document.getElementById("arrow");
+	var aa=arrow.children;
+	box.onmouseover=function(){
+		animate(arrow,{'opacity':100});
+	}
+	box.onmouseout=function(){
+		animate(arrow,{'opacity':0});
+	}
+	var json=[
+	  {
+	  	//1
+		width:400,
+		top:20,
+        left:50,
+        opacity:20,
+        z:2
+	  },
+	  {  // 2
+            width:600,
+            top:70,
+            left:0,
+            opacity:80,
+            z:3
+        },
+        {   // 3
+            width:800,
+            top:100,
+            left:200,
+            opacity:100,
+            z:4
+        },
+        {  // 4
+            width:600,
+            top:70,
+            left:600,
+            opacity:80,
+            z:3
+        },
+        {   //5
+            width:400,
+            top:20,
+            left:750,
+            opacity:20,
+            z:2
+        }
+	];
+	var jieliu=true;
+	change();
+	for(var k in aa){
+		aa[k].onclick=function(){
+			if(this.className=="prev"){
+				//移除第一个，放到json最后一个
+				if(jieliu==true){
+					change(false);
+					jieliu=false;
+				}
+			}else{
+				//把最后一个json删除，并且把最后一个添加到json第一个位置 
+				if(jieliu==true){
+					change(true);
+					jieliu=false;
+				}
+			}
+		}
+		
+	}
+	function change(flag){
+		if(flag){
+			json.unshift(json.pop());
+		}else{
+			json.push(json.shift());
+		}
+		//json里面有五个，所以要用for循环
+		for(var i=0;i<json.length;i++){
+			animate(lis[i],{
+				width:json[i].width,
+				top:json[i].top,
+				left:json[i].left,
+				opacity:json[i].opacity,
+				zIndex:json[i].z
+			},function(){jieliu=true;})
+		}
+	}
+</script>
